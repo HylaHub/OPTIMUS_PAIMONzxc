@@ -26,26 +26,35 @@ public class BGTUScheduleTest {
     public void testFindTeacherSchedule() {
         driver.get("https://www.bstu.ru"); // Изначальный URL
 
-        // Нажать на «Расписание»
-        WebElement scheduleLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Учебное расписание")));
+        // Нажать на ярлычок «Личный кабинет»
+        WebElement scheduleLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.lp-bottom.pngfix")));
         scheduleLink.click();
 
-        // Нажать «Расписание преподавателей»
-        WebElement teacherScheduleLink = wait.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("преподавател")));
+        // Нажать «Расписание 1..4 курсов преподов и студентов»
+        WebElement teacherScheduleLink = wait.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("1, 2, 3")));
         teacherScheduleLink.click();
 
-        // Найти "Я"
-        WebElement filter = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.filter__item[data-index='25']")));
-        filter.click();
+        // Ввести логин и пароль + согласие на обработку и нажать на войти
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input.input")));
+        emailField.sendKeys("Test@email.com");
 
-        // Найти Ястребова А.В.
-        WebElement teacher = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Ястребов А. В.")));
+        WebElement passwordField = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input.input[type='password']")));
+        passwordField.sendKeys("pasw123");
+
+        WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("label.checkbox-item.login_policy .checkbox-item__checkmark")));
+        checkbox.click();
+
+        WebElement login = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn.btn_controls.btn_blue.w100")));
+        login.click();
+
+        // Зайти в успеваемость
+        WebElement teacher = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Успеваемость")));
         teacher.click();
 
         // Проверить, что загружено расписание
-        WebElement scheduleResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, '_timetable_page offset')]")));
-        assertTrue(scheduleResult.isDisplayed(), "Расписание найдено");
-        System.out.println("Тест успешно завершен. Расписание найдено.");
+        WebElement scheduleResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'data-table block')]")));
+        assertTrue(scheduleResult.isDisplayed(), "Прошло успешно");
+        System.out.println("Тест успешно завершен. Успеваемость найдена.");
 
 	try {
             // Задержка перед закрытием браузера
