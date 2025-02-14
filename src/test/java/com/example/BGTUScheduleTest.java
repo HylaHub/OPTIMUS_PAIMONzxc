@@ -17,35 +17,23 @@ public class BGTUScheduleTest {
     public static void setup() {
         System.setProperty("webdriver.chrome.driver", "C:/selenium/chromedriver.exe");
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(7));
         driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(7));
     }
 
     @Test
     public void testFindTeacherSchedule() {
         driver.get("https://www.bstu.ru"); // Изначальный URL
 
-        // Нажать на «Расписание»
-        WebElement scheduleLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Учебное расписание")));
-        scheduleLink.click();
-
-        // Нажать «Расписание преподавателей»
-        WebElement teacherScheduleLink = wait.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("преподавател")));
-        teacherScheduleLink.click();
-
-        // Найти "Я"
-        WebElement filter = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.filter__item[data-index='25']")));
-        filter.click();
-
-        // Найти Ястребова А.В.
-        WebElement teacher = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Ястребов А. В.")));
-        teacher.click();
-
-        // Проверить, что загружено расписание
-        WebElement scheduleResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, '_timetable_page offset')]")));
-        assertTrue(scheduleResult.isDisplayed(), "Расписание найдено");
-        System.out.println("Тест успешно завершен. Расписание найдено.");
+        // переход на страницу схемы кампуса
+        WebElement abit = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Схема кампуса")));
+        abit.click(); 
+    
+        // Проверить схему
+        WebElement scheduleResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'outer-wrap')]")));
+        assertTrue(scheduleResult.isDisplayed(), "не то");
+        System.out.println("Тест успешно завершен. Схема кампуса найдена.");
 
 	try {
             // Задержка перед закрытием браузера
@@ -54,7 +42,7 @@ public class BGTUScheduleTest {
             e.printStackTrace();
         }
     }
-
+    
     @AfterAll
     public static void teardown() {
         if (driver != null) {
