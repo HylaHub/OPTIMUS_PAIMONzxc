@@ -9,7 +9,7 @@ import java.time.Duration;
 import config.ConfigReader;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BGTUScheduleTest {
+public class AuthTest {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
