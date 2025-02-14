@@ -30,11 +30,10 @@ public class BGTUScheduleTest {
         // Получаем URL и фамилию преподавателя из конфигурации
         String url = ConfigReader.getProperty("url");
         String teacherName = ConfigReader.getProperty("teacher");
-        
 
         // Разделяем фамилию и имя для поиска по первой букве фамилии
-        String firstLetter = teacherName.substring(0, 1); // Получаем первую букву фамилии
-        System.out.println("Первая буква фамилии: " + firstLetter);
+        String firstLetter = teacherName.split(" ")[0].substring(0, 1); // Получаем первую букву фамилии
+
         // Находим индекс первой буквы фамилии в алфавите
         int letterIndex = getLetterIndex(firstLetter);
 
