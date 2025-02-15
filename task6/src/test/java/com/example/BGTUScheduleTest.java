@@ -8,7 +8,7 @@ import config.ConfigReader;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class BGTUScheduleTest extends ChromeBase {
+public class AdmLevelTest extends ChromeBase {
 
     @Test
     public void testFindAdmissionLevel() {
