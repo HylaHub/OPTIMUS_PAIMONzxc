@@ -1,27 +1,14 @@
 package com.example;
 
+import core.ChromeBase;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.*;
-
-import java.time.Duration;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import config.ConfigReader;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BGTUSearchTest {
-    private static WebDriver driver;
-    private static WebDriverWait wait;
-
-    @BeforeAll
-    public static void setup() {
-        System.setProperty("webdriver.chrome.driver", "C:/selenium/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-    }
+public class BGTUSearchTest extends ChromeBase {
 
     @Test
     public void testSearch() {
@@ -39,24 +26,16 @@ public class BGTUSearchTest {
         WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("td.ya-site-form__search-input-layout-r")));
         searchButton.click(); 
 
-        // Проверить, что поиск дал результаты 
-        WebElement resultArea = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".ya-site-suggest-items")));
+        // Проверка результата
+        WebElement resultArea = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.wrap-content")));
         assertTrue(resultArea.isDisplayed(), "Результаты поиска не отображаются");
 
         System.out.println("Тест успешно завершен. Результаты поиска отображаются.");
-
         try {
             // Задержка перед закрытием браузера
             Thread.sleep(5000);  // 5 секунд
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+}
 }
