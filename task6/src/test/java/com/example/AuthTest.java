@@ -2,31 +2,18 @@ package com.example;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
-
-import java.time.Duration;
-import config.ConfigReader;
+import core.ChromeBase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import config.ConfigReader;
 
-public class AuthTest {
-    private static WebDriver driver;
-    private static WebDriverWait wait;
-
-    @BeforeAll
-    public static void setup() {
-        System.setProperty("webdriver.chrome.driver", "C:/selenium/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-    }
+public class AuthTest extends ChromeBase {
 
     @Test
     public void testFindTeacherSchedule() {
-        // получить URL из конфига
+        // Получаем URL из конфигурации
         String url = ConfigReader.getProperty("url");
-        driver.get(url); // URL из конфига
+        driver.get(url); // Открываем URL из конфига
 
         // Получить логин и пароль из config.properties
         String username = ConfigReader.getProperty("username");
@@ -42,7 +29,7 @@ public class AuthTest {
         WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("label.checkbox-item.login_policy .checkbox-item__checkmark")));
         checkbox.click();
 
-        // Проверить, что загружено расписание
+        // Проверить, что загружено расписание (или форма входа успешно прошла)
         WebElement scheduleResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'login__form')]")));
         assertTrue(scheduleResult.isDisplayed(), "Прошло успешно");
         System.out.println("Тест успешно завершен. Успеваемость найдена.");
@@ -52,13 +39,6 @@ public class AuthTest {
             Thread.sleep(5000);  // 5 секунд
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
         }
     }
 }
