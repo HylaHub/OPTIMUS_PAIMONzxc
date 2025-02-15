@@ -1,29 +1,15 @@
 package com.example;
 
+import core.ChromeBase;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.*;
-
-import java.time.Duration;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import config.ConfigReader;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BGTUScheduleTest {
-    private static WebDriver driver;
-    private static WebDriverWait wait;
-
+public class BGTUScheduleTest extends ChromeBase {
     // Алфавит в массиве
     private static final String[] alphabet = {"А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ч", "Ш", "Щ", "Ю", "Я"};
-
-    @BeforeAll
-    public static void setup() {
-        System.setProperty("webdriver.chrome.driver", "C:/selenium/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-    }
 
     @Test
     public void testFindTeacherSchedule() {
@@ -31,8 +17,8 @@ public class BGTUScheduleTest {
         String url = ConfigReader.getProperty("url");
         String teacherName = ConfigReader.getProperty("teacher");
 
-        // Разделяем фамилию и имя для поиска по первой букве фамилии
-        String firstLetter = teacherName.split(" ")[0].substring(0, 1); // Получаем первую букву фамилии
+        // Убираем лишние пробелы и извлекаем первую букву фамилии
+        String firstLetter = teacherName.trim().split(" ")[0].substring(0, 1); // Получаем первую букву фамилии
 
         // Находим индекс первой буквы фамилии в алфавите
         int letterIndex = getLetterIndex(firstLetter);
@@ -55,19 +41,12 @@ public class BGTUScheduleTest {
         WebElement scheduleResult = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, '_timetable_page offset')]")));
         assertTrue(scheduleResult.isDisplayed(), "Расписание найдено");
         System.out.println("Тест успешно завершен. Расписание найдено.");
-
+   
         try {
             // Задержка перед закрытием браузера
             Thread.sleep(5000);  // 5 секунд
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
         }
     }
 
